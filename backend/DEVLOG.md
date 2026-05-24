@@ -64,3 +64,46 @@ http://localhost:3000
 
 Result:
 Backend server is running
+
+---
+
+## Development Workflow Setup
+
+### Installed Dev Dependency
+- nodemon
+
+Command used:
+npm install --save-dev nodemon
+
+### Purpose of Nodemon
+Nodemon automatically restarts the Node.js server whenever backend files are changed and saved during development.
+
+This avoids manually stopping and restarting the server after every edit.
+
+### Updated package.json Scripts
+
+"scripts": {
+  "start": "node src/server.js",
+  "dev": "nodemon src/server.js"
+}
+
+### Run Commands
+
+Production mode:
+npm start
+
+Development mode:
+npm run dev
+
+### Nodemon Test
+Modified server response text in:
+src/server.js
+
+Observed:
+- server restarted automatically
+- browser reflected updated response successfully
+
+### Current Backend Capabilities
+- Express server operational
+- Route handling working
+- Auto-reload development workflow configured
