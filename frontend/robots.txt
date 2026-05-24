@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Sitemap Location
+Sitemap: https://kape-21.github.io/dr-JDGhosh/sitemap.xml

@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <meta name="theme-color" content="#05668d" />
+  
+  <title>Book Appointment | Dr. Jay Deep Ghosh | Spine & Ortho Surgeon Guwahati</title>
+  
+  <meta name="description" content="Schedule your consultation with Dr. Jay Deep Ghosh at Apollo Hospitals, Guwahati.">
+  <meta name="robots" content="index, follow">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    /* =========================================
+       ORIGINAL DESIGN STYLES
+       ========================================= */
+    :root {
+      --font-heading: 'Montserrat', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --color-primary-blue: #05668d;
+      --color-primary-green: #00a896;
+      --gradient-accent: linear-gradient(to right, #05668d, #00a896);
+      --bg-cream: linear-gradient(180deg, #fffbeb 0%, #ffffff 100%);
+      --shadow-card: 0 4px 15px rgba(0,0,0,0.05);
+      --color-apollo-orange: #f07f23;
+    }
+
+    body { font-family: var(--font-body); color: #374151; line-height: 1.6; font-size: 0.9rem; }
+
+    /* Hero */
+    .appt-hero {
+      background: url('assets/appointment-hero-bg.webp') no-repeat center center;
+      background-size: cover;
+      padding: 6rem 0 4rem;
+      text-align: center;
+      position: relative;
+      background-color: var(--color-primary-blue);
+    }
+    .appt-hero h1 { color: #fff; margin-bottom: 0.5rem; font-size: 2.2rem; font-family: var(--font-heading); font-weight: 900; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+    .appt-hero p { color: #f1f5f9; max-width: 600px; margin: 0 auto; font-size: 1rem; font-weight: 600; text-shadow: 0 1px 5px rgba(0,0,0,0.4); }
+
+    /* Layout */
+    .content-wrapper { background: var(--bg-cream); padding: 3rem 0; }
+    .appt-grid { display: grid; grid-template-columns: 1.4fr 0.9fr; gap: 2.5rem; align-items: start; }
+
+    /* Form Card */
+    .form-card { background: #fff; padding: 2rem; border-radius: 16px; box-shadow: var(--shadow-card); border: 1px solid rgba(0,0,0,0.04); }
+    .form-head { margin-bottom: 1.5rem; border-bottom: 2px solid rgba(5, 102, 141, 0.2); padding-bottom: 1rem; text-align: center; }
+    .form-head h2 { font-size: 1.4rem; color: var(--color-primary-blue); font-family: var(--font-heading); margin-bottom: 0.3rem; }
+    .form-head p { font-size: 0.85rem; color: #64748b; }
+
+    .form-group { margin-bottom: 1.2rem; }
+    .form-label { display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem; }
+    
+    .form-input, .form-select, .form-textarea { width: 100%; padding: 0.7rem 1rem; font-size: 0.9rem; border-radius: 8px; background: #f8fafc; color: #1e293b; transition: all 0.3s ease; border: 1px solid #e2e8f0; font-family: inherit; }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: var(--color-primary-blue); background: #fff; box-shadow: 0 0 15px rgba(0, 168, 150, 0.4); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    /* File Upload */
+    .file-upload-wrapper { position: relative; border: 2px dashed #cbd5e1; border-radius: 12px; padding: 1.5rem; text-align: center; background: #f8fafc; transition: all 0.3s ease; cursor: pointer; }
+    .file-upload-wrapper:hover { border-color: var(--color-primary-green); background: #f0fdfa; }
+    .file-upload-input { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+    .file-upload-icon { font-size: 1.8rem; color: var(--color-primary-blue); margin-bottom: 0.5rem; }
+    .file-upload-text { font-size: 0.85rem; color: #64748b; font-weight: 500; }
+    .file-name-display { margin-top: 0.5rem; font-size: 0.8rem; font-weight: 600; color: var(--color-primary-green); }
+
+    /* Submit Button */
+    .appointment-actions { text-align: center; margin-top: 1.5rem; }
+    .btn-submit { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.6rem 2rem; font-size: 0.9rem; font-weight: 700; background: var(--gradient-accent); color: #fff; border: none; border-radius: 50px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(5, 102, 141, 0.25); }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(5, 102, 141, 0.35); filter: brightness(1.1); }
+    .btn-submit:disabled { background: #cbd5e1; cursor: not-allowed; }
+
+    /* --- SIDEBAR REFINED STYLES --- */
+    .sidebar-stack { display: flex; flex-direction: column; gap: 1.2rem; } /* Compact gap to match form height */
+
+    /* Universal Sidebar Card */
+    .sidebar-card {
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+        border: 1px solid rgba(5, 102, 141, 0.08);
+        text-align: center;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        overflow: hidden;
+        padding: 1.25rem; /* Compact padding */
+    }
+    .sidebar-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 35px rgba(5, 102, 141, 0.12);
+        border-color: rgba(5, 102, 141, 0.2);
+    }
+
+    /* DEFAULT ANIMATIONS (Always Active) */
+    @keyframes iconFloat {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+    }
+    @keyframes iconPulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+
+    /* 1. CONTACT CARD */
+    .c-icon {
+        width: 50px; height: 50px;
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        color: var(--color-primary-blue);
+        border-radius: 50%;
+        display: grid; place-items: center;
+        font-size: 1.2rem;
+        margin: 0 auto 0.6rem;
+        transition: all 0.3s ease;
+        animation: iconFloat 3s ease-in-out infinite; /* Animated by default */
+    }
+    .c-info h4 { font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 0.1rem; }
+    .c-role { font-size: 0.75rem; color: #64748b; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.6rem; display: block; }
+    .c-phone { 
+        display: inline-block; padding: 0.3rem 1rem; background: #f0fdfa; 
+        color: var(--color-primary-green); font-weight: 700; border-radius: 50px; 
+        font-size: 0.9rem; text-decoration: none; border: 1px solid transparent; transition: 0.3s;
+    }
+    .c-phone:hover { border-color: var(--color-primary-green); background: #fff; }
+
+    /* 2. TIMING CARD */
+    .timing-icon-box {
+        width: 45px; height: 45px; margin: 0 auto 0.4rem;
+        display: grid; place-items: center;
+        color: var(--color-primary-green); font-size: 1.6rem;
+        animation: iconFloat 3.5s ease-in-out infinite; /* Animated by default */
+    }
+    .timing-title { font-size: 0.95rem; font-weight: 800; color: #1e293b; margin-bottom: 0.6rem; text-transform: uppercase; letter-spacing: 0.5px; }
+    .timing-row { margin-bottom: 0.3rem; }
+    .day-badge { background: #0f172a; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-right: 5px; }
+    .time-text { font-weight: 700; color: #334155; font-size: 0.9rem; }
+    .loc-text { font-size: 0.75rem; color: #64748b; margin-top: 0.4rem; display: block; font-style: italic; }
+
+    /* 3. EMERGENCY CARD */
+    .card-emergency {
+        background: #fef2f2; border-color: rgba(239, 68, 68, 0.15); padding: 1rem;
+    }
+    .emerg-icon { 
+        font-size: 1.4rem; color: #ef4444; margin-bottom: 0.3rem; display: inline-block; 
+        animation: iconPulse 2s infinite; /* Animated by default */
+    }
+    .emerg-title { font-size: 0.85rem; font-weight: 700; color: #7f1d1d; margin-bottom: 0.2rem; text-transform: uppercase; }
+    .emerg-number { font-size: 1.4rem; font-weight: 900; color: #ef4444; text-decoration: none; line-height: 1; }
+
+    /* 4. MAP CARD (FIXED) */
+    .card-map-wrapper { 
+        padding: 0 !important; /* Make map cover the card edge-to-edge */
+        overflow: hidden; 
+        position: relative;
+    }
+    .address-highlight { 
+        padding: 0.8rem 1rem; 
+        background: linear-gradient(135deg, #05668d 0%, #034a66 100%); 
+        color: #fff; text-align: left;
+    }
+    .addr-title { 
+        font-size: 0.85rem; font-weight: 700; margin-bottom: 0.3rem; 
+        display: flex; align-items: center; gap: 0.5rem; 
+        text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .addr-text { font-size: 0.8rem; opacity: 0.9; line-height: 1.4; font-weight: 400; }
+    
+    .map-frame { 
+        height: 200px; 
+        width: 100%; 
+        border: none; 
+        display: block; 
+        pointer-events: auto; /* ALLOWS MOVING THE MAP */
+    }
+
+
+    /* --- CALENDAR SIZE FIX (NATIVE - NO JUMPING) --- */
+    .flatpickr-calendar { width: 280px !important; font-size: 0.9rem !important; }
+    .flatpickr-days { width: 280px !important; }
+    .dayContainer { width: 280px !important; min-width: 280px !important; max-width: 280px !important; }
+    .flatpickr-day { height: 36px !important; line-height: 36px !important; }
+
+    /* --- TOAST NOTIFICATIONS (CENTERED POPUP) --- */
+    #toast-container {
+        position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        z-index: 9999; display: flex; flex-direction: column; gap: 10px; align-items: center; pointer-events: none;
+    }
+    .toast-msg {
+        background: white; border-left: 5px solid #00a896; padding: 20px 25px;
+        border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        font-family: var(--font-body); font-size: 1rem; font-weight: 600;
+        display: flex; align-items: center; gap: 12px;
+        animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        max-width: 400px; pointer-events: auto;
+    }
+    .toast-msg.error { border-left-color: #ef4444; }
+    .toast-msg i { font-size: 1.3rem; }
+    .toast-msg.success i { color: #00a896; }
+    .toast-msg.error i { color: #ef4444; }
+    
+    @keyframes popIn { from { opacity: 0; transform: scale(0.7); } to { opacity: 1; transform: scale(1); } }
+    @keyframes fadeOut { to { opacity: 0; transform: scale(0.7); } }
+
+    @media (max-width: 900px) { .appt-grid { grid-template-columns: 1fr; gap: 2rem; } .sidebar-stack { order: 2; } .form-card { order: 1; } }
+    @media (max-width: 600px) { .appt-hero { padding: 3.5rem 0 2rem; } .form-row { grid-template-columns: 1fr; } }
+
+    /* =========================================
+       CUSTOM FOOTER OVERRIDES
+       ========================================= */
+    .footer-grid { grid-template-columns: 1fr 1fr 1fr !important; gap: 2rem !important; align-items: start !important; }
+    .footer-middle-col { display: flex; flex-direction: column; gap: 1.5rem; align-items: center; justify-content: flex-start; }
+    
+    .footer-apollo-card {
+        background: transparent; border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 12px; padding: 1.5rem; text-align: center; width: 100%; max-width: 320px; margin: 0 auto;
+    }
+    .footer-apollo-card .apollo-logo-text { font-family: var(--font-heading); font-weight: 900; font-size: 1.2rem; color: #fff; margin-bottom: 0.5rem; }
+    .footer-apollo-card .apollo-desc { font-size: 0.85rem; color: rgba(255, 255, 255, 0.8); margin-bottom: 1rem; line-height: 1.4; }
+    .footer-apollo-card .btn-apollo {
+        display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+        background: var(--color-apollo-orange); color: #fff; padding: 0.55rem 1.2rem;
+        border-radius: 50px; font-weight: 700; font-size: 0.85rem; text-decoration: none;
+        width: 100%; margin: 0.5rem 0 1rem; transition: transform 0.2s;
+    }
+    .footer-apollo-card .btn-apollo:hover { transform: translateY(-2px); }
+    .footer-apollo-card .apollo-contact { font-size: 0.8rem; color: rgba(255, 255, 255, 0.6); }
+    .footer-apollo-card .apollo-contact a { color: #fff; font-weight: 700; text-decoration: none; }
+
+    .footer-contact-form { gap: 0 !important; }
+    .footer-contact-form .form-group { margin-bottom: 0.5rem !important; }
+    
+    @media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr !important; gap: 3rem !important; } }
+
+  </style>
+</head>
+
+<body>
+  
+  <div id="toast-container"></div>
+
+  <header class="site-header" data-header>
+    <div class="header-grid">
+      
+      <a href="index.html" class="brand-area" aria-label="Dr. Ghosh Home">
+        <img src="assets/icon-new1.png" alt="Dr. Jay Deep Ghosh - Best Orthopaedic Surgeon Guwahati Logo" class="brand-icon">
+        <div class="brand-text-col">
+          <span class="brand-name">Dr. Jay Deep Ghosh</span>
+          <span class="brand-subtitle">Your path to pain free healing</span>
+        </div>
+      </a>
+
+      <nav class="nav-center" data-nav-panel>
+        <ul class="nav-list">
+          <li><a href="about.html" class="nav-link"><i class="fa-solid fa-user-tie"></i> About</a></li>
+          <li><a href="procedures.html" class="nav-link"><i class="fa-solid fa-stethoscope"></i> Procedures</a></li>
+          <li><a href="outcomes.html" class="nav-link"><i class="fa-solid fa-chart-line"></i> Outcomes</a></li>
+          <li><a href="videos.html" class="nav-link"><i class="fa-solid fa-play-circle"></i> Videos</a></li>
+          <li><a href="testimonials.html" class="nav-link"><i class="fa-solid fa-star"></i> Testimonials</a></li>
+        </ul>
+        
+        <div class="mobile-actions">
+          <a href="appointment.html" class="btn btn-header-primary">
+            <i class="fa-solid fa-clipboard-list"></i> Book Appointment
+          </a>
+        </div>
+      </nav>
+
+      <div class="header-actions-desktop"></div>
+
+      <button class="nav-toggle" data-nav-toggle aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars" id="nav-icon"></i>
+      </button>
+
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="appt-hero">
+      <div class="container">
+        <h1>Book Your Consultation</h1>
+        <p>Prioritize your health. Fill out the form below to schedule an appointment with Dr. Jay Deep Ghosh.</p>
+      </div>
+    </section>
+
+    <div class="content-wrapper">
+      <div class="container">
+        <div class="appt-grid">
+          
+          <div class="form-card">
+            <div class="form-head">
+              <h2>Patient Details</h2>
+              <p>Please provide accurate details for a smooth registration process.</p>
+            </div>
+            
+            <form id="primaryForm">
+              <input type="text" name="honeypot" style="display:none !important" tabindex="-1" autocomplete="off">
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="name">Patient Name *</label>
+                  <input type="text" name="name" id="name" class="form-input" placeholder="Full Name" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="phone">Phone Number *</label>
+                  <input type="tel" name="phone" id="phone" class="form-input" placeholder="+91 XXXXX XXXXX" required>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="date">Preferred Date *</label>
+                  <input type="text" name="date" id="date" class="form-input" placeholder="Select Date.." required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="location">Location *</label>
+                  <input type="text" name="location" id="location" class="form-input" placeholder="City / Town" required>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="visit-type">Visit Type *</label>
+                  <select name="visitType" id="visit-type" class="form-select" required>
+                    <option value="" disabled selected>Select Type</option>
+                    <option value="first-visit">First Consultation</option>
+                    <option value="follow-up">Follow Up</option>
+                    <option value="reports">Show Reports</option>
+                    <option value="second-opinion">Second Opinion</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="email">Email *</label>
+                    <input type="email" name="email" id="email" class="form-input" placeholder="example@email.com" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="symptoms">Describe Symptoms / Reason for Visit *</label>
+                <textarea name="reason" id="symptoms" class="form-textarea" rows="4" placeholder="Briefly describe your pain, duration, and any previous treatments..." required></textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Upload Reports / X-Rays (Max 10MB)</label>
+                <div class="file-upload-wrapper">
+                    <input type="file" id="file-upload" class="file-upload-input" accept="image/*,.pdf">
+                    <div class="file-upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                    <div class="file-upload-text">Click or Drag & Drop to Upload</div>
+                    <div class="file-upload-info">Supported: JPG, PNG, PDF (Max 10MB)</div>
+                    <div id="file-name" class="file-name-display"></div>
+                </div>
+              </div>
+
+              <div class="form-group" style="background:#f1f5f9; padding:15px; border-radius:8px;">
+                  <label class="form-label" style="margin-bottom:8px;">Security Check *</label>
+                  <div style="display:flex; align-items:center; gap:10px;">
+                    <span id="captcha-question" style="font-weight:bold; color:#05668d; font-size:1.1rem; background:white; padding:5px 10px; border-radius:4px; border:1px solid #ccc;"></span>
+                    <input type="number" id="captcha-answer" class="form-input" placeholder="?" style="width:80px; text-align:center;" required>
+                  </div>
+                  <small style="color:#64748b; font-size:0.75rem;">Solve the math to prove you are human.</small>
+              </div>
+
+              <div class="appointment-actions">
+                <button type="submit" id="p_submit_btn" class="btn-submit">
+                  <i class="fa-solid fa-calendar-check"></i> Book Appointment
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <aside class="sidebar-stack">
+            
+            <div class="sidebar-card card-contact">
+                <div class="c-icon"><i class="fa-solid fa-user"></i></div>
+                <div class="c-info">
+                  <h4>Kabir Das</h4>
+                  <span class="c-role">Public Relation Officer</span>
+                  <a href="tel:+919085961451" class="c-phone">+91 90859 61451</a>
+                </div>
+            </div>
+
+            <div class="sidebar-card card-languages">
+                <div class="c-icon" style="background: linear-gradient(135deg, #f3e8ff 0%, #d8b4fe 100%); color: #7e22ce;">
+                    <i class="fa-solid fa-language"></i>
+                </div>
+                <div class="c-info">
+                  <h4 style="font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 0.3rem;">Languages Spoken</h4>
+                  <p style="font-size: 0.85rem; color: #64748b; font-weight: 500; line-height: 1.4;">
+                    English, Hindi, Assamese, Bengali
+                  </p>
+                </div>
+            </div>
+
+            <div class="sidebar-card card-timing">
+                <div class="timing-icon-box"><i class="fa-regular fa-clock"></i></div>
+                <div class="timing-title">OPD Timings</div>
+                <div class="timing-row">
+                    <span class="day-badge">Mon - Sat</span>
+                    <span class="time-text">4:30 PM - 8:30 PM</span>
+                </div>
+                <span class="loc-text">Apollo Hospitals, Guwahati</span>
+            </div>
+
+            <div class="sidebar-card card-emergency">
+              <div class="emerg-icon"><i class="fa-solid fa-truck-medical"></i></div>
+              <div class="emerg-title">Emergency Trauma Care</div>
+              <a href="tel:1066" class="emerg-number">1066</a>
+            </div>
+
+            <div class="sidebar-card card-map-wrapper">
+                <div class="address-highlight">
+                    <div class="addr-title"><i class="fa-solid fa-location-dot"></i> Clinic Address</div>
+                    <div class="addr-text">
+                        Apollo Hospitals, Lotus Tower, <br>
+                        Christian Basti, Guwahati, 781005
+                    </div>
+                </div>
+                <div class="map-wrapper">
+                  <iframe class="map-frame"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3580.346894569584!2d91.77869407604345!3d26.15404529094764!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x375a59634c178b53%3A0x81381ecdd1e8f3cd!2sDr.%20Jay%20Deep%20Ghosh%20%7C%20Best%20orthopedic%20%26%20spine%20surgeon%20doctor%20in%20guwahati-assam-northeast!5e0!3m2!1sen!2sin!4v1706346789012!5m2!1sen!2sin" 
+                    allowfullscreen="" loading="lazy">
+                  </iframe>
+                </div>  
+            </div>
+            
+          </aside>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer" id="contact">
+    <div class="footer-top">
+      <div class="footer-grid">
+        
+        <div class="footer-col footer-brand-col">
+          <a href="index.html" class="brand-area" aria-label="Dr. Jay Deep Ghosh Footer Link">
+            <img src="assets/icon-new1.png" alt="Dr. Jay Deep Ghosh Logo" class="brand-icon">
+            <div class="brand-text-col">
+              <span class="brand-name">Dr. Jay Deep Ghosh</span>
+              <span class="brand-subtitle">Your path to pain free healing</span>
+            </div>
+          </a>
+          
+          <p class="footer-tagline">
+            Restoring mobility with advanced spine & orthopaedic care in Guwahati.
+          </p>
+          
+          <div class="footer-legal-links">
+            <a href="terms.html">Terms & Conditions</a>
+            <span class="legal-sep">|</span>
+            <a href="privacy.html">Privacy Policy</a>
+          </div>
+
+          <div class="footer-social-icons brand-social">
+            <a href="https://www.facebook.com/jaydeepxp" target="_blank" aria-label="Dr Jay Deep Ghosh Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="https://www.youtube.com/@jaydeepxp" target="_blank" aria-label="Dr Jay Deep Ghosh YouTube"><i class="fa-brands fa-youtube"></i></a>
+            <a href="https://www.instagram.com/dr.jay_deep_ghosh_official?igsh=ZmsybzB1YXI4Zzl1" target="_blank" aria-label="Dr Jay Deep Ghosh Instagram"><i class="fa-brands fa-instagram"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-col footer-middle-col">
+            <div class="footer-apollo-card">
+                <div class="apollo-logo-text">Apollo 24|7</div>
+                <p class="apollo-desc">To book an appointment via the Apollo 247 platform</p>
+                <a href="https://www.apollo247.com/doctors/dr-jay-deep-ghosh-572fb72f-e250-4543-b303-b90ed55302af" target="_blank" class="btn-apollo">
+                    <i class="fa-solid fa-hospital-user"></i> Click Here
+                </a>
+                <div class="apollo-contact">
+                   <span>Apollo Front Desk:</span> <a href="tel:03612345678">0361-2345678</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-col footer-form-col">
+          <div class="footer-form-wrapper">
+            <h3 class="footer-heading">Contact Us</h3>
+            <form class="footer-contact-form" id="footerContactForm">
+              <input type="hidden" name="formType" value="contact"> <input type="text" name="honeypot" style="display:none !important" tabindex="-1" autocomplete="off">
+
+              <div class="form-group">
+                <input type="text" name="name" placeholder="Your Name" required>
+              </div>
+              <div class="form-group">
+                <input type="tel" name="phone" placeholder="Phone Number" required>
+              </div>
+              <div class="form-group">
+                <input type="email" name="email" placeholder="Email" required>
+              </div>
+              <div class="form-group">
+                <textarea name="message" placeholder="Message" rows="3" required></textarea>
+              </div>
+              <button type="submit" id="c_submit_btn" class="btn btn-header-primary footer-submit-btn">
+                Send Message
+              </button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-bottom-inner">
+      <p class="footer-note">
+        <span>© <span id="year">2026</span> Dr. Jay Deep Ghosh. All Rights Reserved.</span>
+        <br><i>Developed by Kapil</i>
+      </p>
+    </div>
+    </div> </footer>
+
+  <script src="js/main.js" defer></script>
+  
+  <script>
+    const SUPABASE_URL = 'https://qplqcptsqqitvhgymydq.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFwbHFjcHRzcXFpdHZoZ3lteWRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwOTQwODIsImV4cCI6MjA4NjY3MDA4Mn0.BzfMiz8Znd8Td1TRWjacMVq0WcDf5lHcHm21HB0zdX0';
+    
+    function showToast(message, type = 'success') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = `toast-msg ${type}`;
+        
+        const icon = type === 'success' ? '<i class="fa-solid fa-circle-check"></i>' : '<i class="fa-solid fa-circle-exclamation"></i>';
+        
+        toast.innerHTML = `${icon} <span>${message}</span>`;
+        container.appendChild(toast);
+
+        setTimeout(() => {
+            toast.style.animation = 'fadeOut 0.3s ease-out forwards';
+            setTimeout(() => toast.remove(), 300);
+        }, 4000);
+    }
+
+    let captchaSum = 0;
+    function initCaptcha() {
+        const n1 = Math.floor(Math.random() * 10) + 1;
+        const n2 = Math.floor(Math.random() * 10) + 1;
+        captchaSum = n1 + n2;
+        document.getElementById('captcha-question').textContent = `${n1} + ${n2} =`;
+        document.getElementById('captcha-answer').value = ''; 
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        if(!window.supabase) { showToast("Error: Supabase library not loaded.", 'error'); return; }
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        flatpickr("#date", {
+            dateFormat: "Y-m-d", altInput: true, altFormat: "d-m-Y", minDate: "today", disableMobile: "true"
+        });
+
+        initCaptcha();
+
+        const fileInput = document.getElementById('file-upload');
+        const fileNameDisplay = document.getElementById('file-name');
+        
+        if(fileInput) {
+            fileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    if(file.size > 10 * 1024 * 1024) { 
+                        showToast("File too large (Max 10MB)", 'error'); 
+                        fileInput.value = ""; 
+                        fileNameDisplay.textContent = "";
+                    } else {
+                        fileNameDisplay.textContent = "Selected: " + file.name;
+                    }
+                }
+            });
+        }
+
+        const form = document.getElementById('primaryForm');
+        
+        if(form) {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault(); e.stopPropagation();
+
+                const btn = document.getElementById('p_submit_btn');
+                const originalText = btn.innerHTML;
+                const formData = new FormData(form);
+                
+                if (formData.get('honeypot')) {
+                    console.warn("Bot detected."); showToast("Appointment Booked!", "success"); form.reset(); return;
+                }
+
+                const userAnswer = parseInt(document.getElementById('captcha-answer').value);
+                if (userAnswer !== captchaSum) {
+                    showToast("Incorrect Security Check Answer.", 'error'); btn.disabled = false; return;
+                }
+
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
+
+                try {
+                    let fileUrl = null;
+                    if (fileInput && fileInput.files.length > 0) {
+                        btn.innerHTML = 'Uploading File...';
+                        const file = fileInput.files[0];
+                        const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
+                        
+                        const { data: uploadData, error: uploadError } = await supabase.storage.from('uploads').upload(fileName, file);
+                        if (uploadError) throw new Error("Upload Error: " + uploadError.message);
+                        
+                        const { data: urlData } = supabase.storage.from('uploads').getPublicUrl(fileName);
+                        fileUrl = urlData.publicUrl;
+                    }
+
+                    const insertData = {
+                        patient_name: formData.get('name'), phone: formData.get('phone'), email: formData.get('email'),
+                        preferred_date: formData.get('date'), location: formData.get('location'),
+                        visit_type: formData.get('visitType'), symptoms: formData.get('reason'),
+                        file_url: fileUrl, status: 'Pending'
+                    };
+
+                    btn.innerHTML = 'Booking Slot...';
+                    const { error } = await supabase.from('appointments').insert([insertData]);
+                    if (error) throw error;
+
+                    showToast("Appointment Booked! We will confirm shortly.", 'success');
+                    form.reset(); initCaptcha(); 
+                    if(fileNameDisplay) fileNameDisplay.textContent = "";
+
+                } catch (err) {
+                    console.error(err); showToast("Error: " + err.message, 'error');
+                } finally {
+                    btn.disabled = false; btn.innerHTML = originalText;
+                }
+            });
+        }
+    });
+  </script>
+</body>
+</html>
