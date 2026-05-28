@@ -1,12 +1,6 @@
-const express = require("express");
-
-const app = express();
+const app = require('./app');
 
 const PORT = 3000;
-
-app.get("/", (req, res) => {
-  res.send("Backend auto reload working");
-});
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
