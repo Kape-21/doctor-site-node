@@ -1,13 +1,30 @@
 const express = require("express");
 
-const router = express.Router();
-
 const {
   getAppointments,
+  createAppointmentController,
 } = require("../controllers/appointmentController");
 
-console.log(getAppointments);
+const appointmentLoggerMiddleware = require(
+  "../middleware/appointmentLoggerMiddleware"
+);
 
-router.get("/", getAppointments);
+const appointmentValidationMiddleware = require(
+  "../middleware/appointmentValidationMiddleware"
+);
+
+const router = express.Router();
+
+router.get(
+  "/",
+  appointmentLoggerMiddleware,
+  getAppointments
+);
+
+router.post(
+  "/",
+  appointmentValidationMiddleware,
+  createAppointmentController
+);
 
 module.exports = router;

@@ -1,9 +1,13 @@
-const getinquiry = (req, res) => {
-  res.json({
-    success: true,
-    message: "Inquiry controller is working",
-  });
-};
+const {
+  getInquiriesData,
+} = require("../services/inquiryService");
+
+function getInquiries(req, res) {
+  const result = getInquiriesData();
+
+  res.json(result);
+}
+
 module.exports = {
-  getinquiry,
+  getInquiries,
 };

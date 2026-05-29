@@ -1,9 +1,12 @@
-const getAvailability = (req, res) => {
-  res.json({
-    success: true,
-    message: "Availability controller is working",
-  });
-};
+const {
+  getAvailabilityData,
+} = require("../services/availabilityService");
+
+function getAvailability(req, res) {
+  const result = getAvailabilityData();
+
+  res.json(result);
+}
 
 module.exports = {
   getAvailability,

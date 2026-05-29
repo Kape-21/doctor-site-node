@@ -3,11 +3,9 @@ const express = require("express");
 const router = express.Router();
 
 const {
-  getinquiry,
+  getInquiries,
 } = require("../controllers/inquiryController");
 
-console.log(getinquiry);
-
-router.get("/", getinquiry);
+router.get("/", getInquiries);
 
 module.exports = router;
